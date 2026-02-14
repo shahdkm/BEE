@@ -1,0 +1,327 @@
+import React, { useState } from 'react';
+import { Play, Info, Check, ChevronRight, BookOpen, Bug, PawPrint, Activity, Dna, ArrowRight } from 'lucide-react';
+
+const ReproductiveSystemApp = () => {
+  const [activeTab, setActiveTab] = useState('bees');
+  const [selectedAnimalType, setSelectedAnimalType] = useState('mammals'); // mammals or poultry
+
+  // Data Content
+  const content = {
+    bees: {
+      title: "التكاثر في النحل",
+      description: "نظام طبقي دقيق يحدد الوظيفة التناسلية لكل فرد في الخلية.",
+      members: [
+        {
+          id: 'queen',
+          role: 'الملكة (The Queen)',
+          icon: '👑',
+          color: 'bg-yellow-100 border-yellow-400 text-yellow-800',
+          details: "تمتلك جهازاً تناسلياً متطوراً جداً. وظيفتها الأساسية هي التزاوج (مرة واحدة في العمر عادةً) وتخزين الحيوانات المنوية في 'القابلة المنوية' لاستخدامها طوال حياتها في وضع البيض."
+        },
+        {
+          id: 'drone',
+          role: 'الذكور (Drones)',
+          icon: '🐝',
+          color: 'bg-blue-100 border-blue-400 text-blue-800',
+          details: "وظيفتهم الوحيدة والأساسية هي تلقيح الملكة. يمتلكون جهازاً تناسلياً مخصصاً لذلك، ويموت الذكر مباشرة بعد عملية التزاوج نتيجة انفصال جهازه التناسلي."
+        },
+        {
+          id: 'worker',
+          role: 'العاملات (Workers)',
+          icon: '⚙️',
+          color: 'bg-gray-100 border-gray-400 text-gray-800',
+          details: "إناث عقيمة. تمتلك جهازاً تناسلياً ضامراً (غير وظيفي) في الظروف العادية، حيث تقوم الملكة بإفراز فيرمونات تمنع تطور مبايض العاملات."
+        }
+      ]
+    },
+    animals: {
+      title: "التشريح في الماشية والدواجن",
+      description: "مقارنة بين الأجهزة التناسلية في الثدييات (الكلاب، الخيول، الأبقار، الأغنام) والطيور.",
+      types: {
+        mammals: {
+          label: "الثدييات (أبقار، خيول، كلاب)",
+          male: {
+            organ: "الخصيتين (Testes)",
+            desc: "إنتاج الحيوانات المنوية والهرمونات.",
+            extras: "غدد ملحقة: البروستاتا والحويصلات المنوية (تفرز سوائل مغذية وناقلة للحيوانات المنوية)."
+          },
+          female: {
+            organ: "المبيضين (Ovaries)",
+            desc: "إنتاج البويضات وهرمونات الأنوثة.",
+            structure: ["قناة فالوب", "الرحم (متعدد الأشكال حسب النوع)", "عنق الرحم", "المهبل"],
+            cycle: "تختلف دورة الشبق (Estrous Cycle) ومدة الحمل بشكل كبير بين الأنواع."
+          }
+        },
+        poultry: {
+          label: "الدواجن (الطيور)",
+          male: {
+            organ: "الخصيتين (داخل الجسم)",
+            desc: "تقع داخل تجويف الجسم (ليست في كيس صفن).",
+            extras: "لا توجد غدد ملحقة متطورة كما في الثدييات. يتم التلقيح عبر 'المجمع' (Cloaca)."
+          },
+          female: {
+            organ: "مبيض واحد نشط (الأيسر عادة)",
+            desc: "المبيض الأيمن يكون ضامراً.",
+            structure: ["قناة البيض (تفرز البياض والقشرة)", "الرحم (غدة القشرة)", "المجمع"],
+            cycle: "لا توجد دورة شبق وحمل، بل دورة وضع بيض."
+          }
+        }
+      }
+    },
+    signs: {
+      title: "علامات الجنس (الأولية والثانوية)",
+      description: "الفرق بين الأعضاء الأساسية والصفات الظاهرية.",
+      primary: {
+        title: "الجنس الأولي (Primary)",
+        icon: <Dna className="w-6 h-6" />,
+        text: "هي الأعضاء التناسلية التي يولد بها الكائن وتكون مسؤولة مباشرة عن التكاثر.",
+        examples: ["الخصيتين وعضو التكاثر في الذكور", "المبيضين والرحم في الإناث"]
+      },
+      secondary: {
+        title: "الجنس الثانوي (Secondary)",
+        icon: <Activity className="w-6 h-6" />,
+        text: "الصفات التي تظهر عند البلوغ الجنسي وتميز الذكر عن الأنثى شكلياً ولا علاقة مباشرة لها بعملية التخصيب.",
+        examples: ["حجم الجسم والعضلات", "اختلاف الصوت (الصحيح)", "نمو الشعر أو الريش المميز", "العرف والذيل في الديك"]
+      }
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-800" dir="rtl">
+      {/* Header */}
+      <header className="bg-emerald-700 text-white p-6 shadow-lg">
+        <div className="max-w-4xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold flex items-center gap-2">
+              <BookOpen className="w-8 h-8" />
+              أطلس التشريح التناسلي
+            </h1>
+            <p className="text-emerald-100 mt-1 text-sm">تطبيق تعليمي تفاعلي للتشريح والفسيولوجيا</p>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content Container */}
+      <main className="max-w-4xl mx-auto p-4 md:p-6">
+        
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
+          <button
+            onClick={() => setActiveTab('bees')}
+            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
+              activeTab === 'bees' 
+                ? 'bg-yellow-100 text-yellow-800 shadow-sm border border-yellow-200' 
+                : 'hover:bg-slate-50 text-slate-500'
+            }`}
+          >
+            <Bug className="w-5 h-5" />
+            النحل
+          </button>
+          <button
+            onClick={() => setActiveTab('animals')}
+            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
+              activeTab === 'animals' 
+                ? 'bg-emerald-100 text-emerald-800 shadow-sm border border-emerald-200' 
+                : 'hover:bg-slate-50 text-slate-500'
+            }`}
+          >
+            <PawPrint className="w-5 h-5" />
+            الماشية والدواجن
+          </button>
+          <button
+            onClick={() => setActiveTab('signs')}
+            className={`flex-1 py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all font-medium ${
+              activeTab === 'signs' 
+                ? 'bg-purple-100 text-purple-800 shadow-sm border border-purple-200' 
+                : 'hover:bg-slate-50 text-slate-500'
+            }`}
+          >
+            <Activity className="w-5 h-5" />
+            علامات الجنس
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className="transition-opacity duration-300">
+          
+          {/* BEES SECTION */}
+          {activeTab === 'bees' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-slate-800 mb-2">{content.bees.title}</h2>
+                <p className="text-slate-600">{content.bees.description}</p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {content.bees.members.map((member) => (
+                  <div key={member.id} className={`bg-white rounded-2xl p-6 shadow-md border-t-4 hover:shadow-xl transition-shadow ${member.color.replace('bg-', 'border-').split(' ')[1]}`}>
+                    <div className="text-4xl mb-4 text-center bg-slate-50 w-16 h-16 mx-auto rounded-full flex items-center justify-center shadow-inner">
+                      {member.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-center mb-4">{member.role}</h3>
+                    <div className="text-sm leading-relaxed opacity-90 text-justify">
+                      {member.details}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* ANIMALS SECTION */}
+          {activeTab === 'animals' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-800">{content.animals.title}</h2>
+                  <p className="text-slate-600 text-sm mt-1">{content.animals.description}</p>
+                </div>
+                
+                {/* Sub-toggle for animals */}
+                <div className="flex bg-slate-200 rounded-lg p-1 mt-4 md:mt-0">
+                  <button 
+                    onClick={() => setSelectedAnimalType('mammals')}
+                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${selectedAnimalType === 'mammals' ? 'bg-white shadow text-slate-800' : 'text-slate-500'}`}
+                  >
+                    الثدييات
+                  </button>
+                  <button 
+                    onClick={() => setSelectedAnimalType('poultry')}
+                    className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${selectedAnimalType === 'poultry' ? 'bg-white shadow text-slate-800' : 'text-slate-500'}`}
+                  >
+                    الدواجن
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Male Card */}
+                <div className="bg-blue-50 rounded-2xl p-6 border border-blue-100">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-blue-600 text-white p-2 rounded-lg">
+                      <ArrowRight className="w-5 h-5 rotate-180" /> {/* Simulating male symbol somewhat */}
+                    </div>
+                    <h3 className="text-xl font-bold text-blue-900">الذكر (Male)</h3>
+                  </div>
+                  
+                  <ul className="space-y-4">
+                    <li className="bg-white p-4 rounded-xl shadow-sm">
+                      <span className="font-bold text-blue-700 block mb-1">الأعضاء الأساسية:</span>
+                      {content.animals.types[selectedAnimalType].male.organ}
+                      <p className="text-sm text-slate-600 mt-1">{content.animals.types[selectedAnimalType].male.desc}</p>
+                    </li>
+                    <li className="bg-white p-4 rounded-xl shadow-sm">
+                      <span className="font-bold text-blue-700 block mb-1">تفاصيل إضافية:</span>
+                      <p className="text-sm text-slate-600">{content.animals.types[selectedAnimalType].male.extras}</p>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Female Card */}
+                <div className="bg-pink-50 rounded-2xl p-6 border border-pink-100">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-pink-600 text-white p-2 rounded-lg">
+                      <div className="w-5 h-5 font-bold flex items-center justify-center">+</div> {/* Simulating female symbol */}
+                    </div>
+                    <h3 className="text-xl font-bold text-pink-900">الأنثى (Female)</h3>
+                  </div>
+
+                  <ul className="space-y-4">
+                    <li className="bg-white p-4 rounded-xl shadow-sm">
+                      <span className="font-bold text-pink-700 block mb-1">الأعضاء الأساسية:</span>
+                      {content.animals.types[selectedAnimalType].female.organ}
+                      <p className="text-sm text-slate-600 mt-1">{content.animals.types[selectedAnimalType].female.desc}</p>
+                    </li>
+                    <li className="bg-white p-4 rounded-xl shadow-sm">
+                      <span className="font-bold text-pink-700 block mb-1">التركيب والدورة:</span>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {content.animals.types[selectedAnimalType].female.structure.map((item, idx) => (
+                           <span key={idx} className="bg-pink-100 text-pink-800 text-xs px-2 py-1 rounded-full">{item}</span>
+                        ))}
+                      </div>
+                      <p className="text-sm text-slate-600 border-t border-pink-100 pt-2 mt-2">
+                        {content.animals.types[selectedAnimalType].female.cycle}
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* SIGNS SECTION */}
+          {activeTab === 'signs' && (
+            <div className="space-y-6 animate-fadeIn">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-slate-800 mb-2">{content.signs.title}</h2>
+                <p className="text-slate-600">{content.signs.description}</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Primary Signs */}
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-t-4 border-indigo-500">
+                  <div className="bg-indigo-50 p-6 flex items-center justify-center flex-col text-center">
+                    <div className="bg-indigo-100 p-4 rounded-full text-indigo-600 mb-3">
+                      {content.signs.primary.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-indigo-900">{content.signs.primary.title}</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-slate-700 mb-4 font-medium leading-relaxed">
+                      {content.signs.primary.text}
+                    </p>
+                    <div className="bg-indigo-50 rounded-lg p-4">
+                      <h4 className="text-indigo-800 font-bold mb-2 text-sm">أمثلة:</h4>
+                      <ul className="space-y-2">
+                        {content.signs.primary.examples.map((ex, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                            <Check className="w-4 h-4 text-indigo-500 mt-0.5 shrink-0" />
+                            {ex}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Secondary Signs */}
+                <div className="bg-white rounded-2xl shadow-lg overflow-hidden border-t-4 border-orange-500">
+                  <div className="bg-orange-50 p-6 flex items-center justify-center flex-col text-center">
+                    <div className="bg-orange-100 p-4 rounded-full text-orange-600 mb-3">
+                      {content.signs.secondary.icon}
+                    </div>
+                    <h3 className="text-xl font-bold text-orange-900">{content.signs.secondary.title}</h3>
+                  </div>
+                  <div className="p-6">
+                    <p className="text-slate-700 mb-4 font-medium leading-relaxed">
+                      {content.signs.secondary.text}
+                    </p>
+                    <div className="bg-orange-50 rounded-lg p-4">
+                      <h4 className="text-orange-800 font-bold mb-2 text-sm">أمثلة تختلف بين الأنواع:</h4>
+                      <ul className="space-y-2">
+                        {content.signs.secondary.examples.map((ex, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                            <Check className="w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
+                            {ex}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+        </div>
+      </main>
+      
+      {/* Footer */}
+      <footer className="mt-12 py-6 bg-slate-100 text-center text-slate-500 text-sm border-t border-slate-200">
+        <p>مرجع تعليمي مبسط لطلاب الأحياء والطب البيطري</p>
+      </footer>
+    </div>
+  );
+};
+
+export default ReproductiveSystemApp;
